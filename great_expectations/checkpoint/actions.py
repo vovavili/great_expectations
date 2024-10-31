@@ -22,6 +22,10 @@ import requests
 from typing_extensions import Annotated
 
 from great_expectations._docs_decorators import public_api
+from great_expectations.analytics.client import submit as submit_event
+from great_expectations.analytics.events import (
+    NotificationActionRanEvent,
+)
 from great_expectations.checkpoint.util import (
     send_email,
     send_microsoft_teams_notifications,
@@ -289,7 +293,16 @@ class SlackNotificationAction(DataDocsAction):
             run_id=checkpoint_result.run_id,
         )
 
-        return self._send_slack_notification(payload=payload)
+        result = self._send_slack_notification(payload=payload)
+
+        checkpoint = checkpoint_result.checkpoint_config
+        submit_event(
+            event=NotificationActionRanEvent(
+                type=self.type, notify_type=self.notify_on, checkpoint_id=checkpoint.id
+            )
+        )
+
+        return result
 
     def _render_validation_result(
         self,
@@ -473,6 +486,14 @@ class MicrosoftTeamsNotificationAction(ValidationAction):
             payload=payload,
             microsoft_teams_webhook=webhook,
         )
+
+        checkpoint = checkpoint_result.checkpoint_config
+        submit_event(
+            event=NotificationActionRanEvent(
+                type=self.type, notify_type=self.notify_on, checkpoint_id=checkpoint.id
+            )
+        )
+
         return {"microsoft_teams_notification_result": teams_notif_result}
 
 
@@ -674,6 +695,13 @@ class EmailAction(ValidationAction):
             receiver_emails_list=receiver_emails_list,
             use_tls=self.use_tls,
             use_ssl=self.use_ssl,
+        )
+
+        checkpoint = checkpoint_result.checkpoint_config
+        submit_event(
+            event=NotificationActionRanEvent(
+                type=self.type, notify_type=self.notify_on, checkpoint_id=checkpoint.id
+            )
         )
 
         # sending payload back as dictionary
