@@ -52,7 +52,7 @@ class PostgresBatchTestSetup(SQLBatchTestSetup[PostgreSQLDatasourceTestConfig]):
     def make_batch(self) -> Batch:
         name = self._random_resource_name()
         return (
-            self._context.data_sources.add_postgres(
+            self.context.data_sources.add_postgres(
                 name=name, connection_string=self.connection_string
             )
             .add_table_asset(
