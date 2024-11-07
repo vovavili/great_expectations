@@ -8,6 +8,7 @@ from great_expectations.compatibility.sqlalchemy import sqltypes
 from great_expectations.datasource.fluent.interfaces import Batch
 from tests.integration.conftest import parameterize_batch_for_data_sources
 from tests.integration.test_utils.data_source_config import (
+    MSSQLDatasourceTestConfig,
     MySQLDatasourceTestConfig,
     PandasDataFrameDatasourceTestConfig,
     PandasFilesystemCsvDatasourceTestConfig,
@@ -18,6 +19,7 @@ from tests.integration.test_utils.data_source_config import (
 
 @parameterize_batch_for_data_sources(
     data_source_configs=[
+        MSSQLDatasourceTestConfig(),
         MySQLDatasourceTestConfig(),
         PandasDataFrameDatasourceTestConfig(),
         PandasFilesystemCsvDatasourceTestConfig(),
@@ -34,6 +36,7 @@ def test_expect_column_min_to_be_between(batch_for_datasource) -> None:
 
 @parameterize_batch_for_data_sources(
     data_source_configs=[
+        MSSQLDatasourceTestConfig(column_types={"date": sqltypes.DATE}),
         MySQLDatasourceTestConfig(column_types={"date": sqltypes.DATE}),
         PandasDataFrameDatasourceTestConfig(),
         PandasFilesystemCsvDatasourceTestConfig(),
@@ -62,6 +65,7 @@ def test_expect_column_min_to_be_between__date(batch_for_datasource) -> None:
 
 @parameterize_batch_for_data_sources(
     data_source_configs=[
+        MSSQLDatasourceTestConfig(column_types={"date": sqltypes.DATE}),
         MySQLDatasourceTestConfig(column_types={"date": sqltypes.DATE}),
         PandasDataFrameDatasourceTestConfig(),
         PandasFilesystemCsvDatasourceTestConfig(),
@@ -90,6 +94,7 @@ def test_expect_column_max_to_be_between__date(batch_for_datasource) -> None:
 
 @parameterize_batch_for_data_sources(
     data_source_configs=[
+        MSSQLDatasourceTestConfig(),
         MySQLDatasourceTestConfig(),
         PandasDataFrameDatasourceTestConfig(),
         PandasFilesystemCsvDatasourceTestConfig(),
@@ -106,6 +111,7 @@ def test_expect_column_max_to_be_between(batch_for_datasource) -> None:
 
 @parameterize_batch_for_data_sources(
     data_source_configs=[
+        MSSQLDatasourceTestConfig(),
         MySQLDatasourceTestConfig(),
         PandasDataFrameDatasourceTestConfig(),
         PandasFilesystemCsvDatasourceTestConfig(),
@@ -122,6 +128,7 @@ def test_expect_column_to_exist(batch_for_datasource):
 
 @parameterize_batch_for_data_sources(
     data_source_configs=[
+        MSSQLDatasourceTestConfig(),
         MySQLDatasourceTestConfig(),
         PandasDataFrameDatasourceTestConfig(),
         PandasFilesystemCsvDatasourceTestConfig(),
@@ -155,6 +162,7 @@ def test_expect_column_mean_to_be_between(batch_for_datasource):
 class TestExpectTableRowCountToEqualOtherTable:
     @parameterize_batch_for_data_sources(
         data_source_configs=[
+            MSSQLDatasourceTestConfig(),
             MySQLDatasourceTestConfig(),
             PostgreSQLDatasourceTestConfig(),
             SnowflakeDatasourceTestConfig(),
@@ -174,6 +182,7 @@ class TestExpectTableRowCountToEqualOtherTable:
 
     @parameterize_batch_for_data_sources(
         data_source_configs=[
+            MSSQLDatasourceTestConfig(),
             MySQLDatasourceTestConfig(),
             PostgreSQLDatasourceTestConfig(
                 extra_column_types={"other_table": {"col_b": sqltypes.VARCHAR}}
@@ -199,6 +208,7 @@ class TestExpectTableRowCountToEqualOtherTable:
 
     @parameterize_batch_for_data_sources(
         data_source_configs=[
+            MSSQLDatasourceTestConfig(),
             MySQLDatasourceTestConfig(),
             PostgreSQLDatasourceTestConfig(),
             SnowflakeDatasourceTestConfig(),
